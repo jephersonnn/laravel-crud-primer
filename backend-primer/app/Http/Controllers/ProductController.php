@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $products = Product::all();
 
         return response()->json([
@@ -41,6 +42,34 @@ class ProductController extends Controller
                     'product' => $products
                 ]
             );
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->messages()
+            ]);
+        } else {
+
+            $product = Product::find($request->id);
+
+            if ($product) {
+                $product -> update($request->all());
+                return response()->json(
+                    [
+                        'status' => 'update success',
+                        'product' => $product
+                    ]
+                );
+            }
         }
     }
 }
