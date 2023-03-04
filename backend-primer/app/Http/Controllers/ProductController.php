@@ -62,7 +62,7 @@ class ProductController extends Controller
             $product = Product::find($request->id);
 
             if ($product) {
-                $product -> update($request->all());
+                $product->update($request->all());
                 return response()->json(
                     [
                         'status' => 'update success',
@@ -70,6 +70,23 @@ class ProductController extends Controller
                     ]
                 );
             }
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $product = Product::find($request->id);
+
+        if ($product) {
+            $product->delete();
+            return response()->json([
+                'status' => 'product deleted',
+                'products' => Product::all()
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Product not found'
+            ]);
         }
     }
 }
