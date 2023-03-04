@@ -11,7 +11,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'name' => 'required',
             'description' => 'required',
             'price' => 'required|integer'
         ]);
@@ -20,14 +20,18 @@ class ProductController extends Controller
             return response()->json([
                 'message' => $validator->messages()
             ]);
-        }else{
+        } else {
 
-        //CREATE
-        Product::create($request->all());
-        return response()->json(
-            
-        );
-    }
-        
+            //CREATE
+            Product::create($request->all());
+            $products = Product::all();
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'product' => $products
+                ]
+            );
+        }
     }
 }
